@@ -1,0 +1,64 @@
+#!/usr/bin/env python
+
+import RPi.GPIO as GPIO
+import time 
+import os
+import sys
+#import pigpio
+
+#pi = pigpio.pi()
+#if not pi.connected:
+#   exit()
+
+
+SIG=38 #JAUNE
+
+start=time.perf_counter()
+
+try:
+
+	while True:	
+		GPIO.setmode(GPIO.BOARD)
+		GPIO.setup(SIG, GPIO.OUT)
+		#pi.set_mode(SIG, pigpio.OUTPUT)
+		#pi.gpio_trigger(SIG,10,1)
+		#pi.write(SIG,1)
+		GPIO.output(SIG,GPIO.HIGH)
+		time.sleep(0.00001)
+		#pi.write(SIG,0)
+		#GPIO.output(SIG,GPIO.LOW)
+		#pi.set_mode(SIG, pigpio.INPUT)
+		GPIO.setup(SIG, GPIO.IN)
+		start = time.time()
+		#while pi.read(SIG)==0:
+		while GPIO.input(SIG)==0:
+		#	print("fuck")
+  			start = time.time()
+		while GPIO.input(SIG)==1:
+			stop = time.time()
+		#if pi.wait_for_edge(SIG, pigpio.RISING_EDGE, 1.0):
+   		#	stop = time.time()
+		elapsed = stop-start
+		distance = elapsed * 34000
+		distance = distance / 2
+                print "Distance : %.1f" % distance
+			#print("Falling edge detected")
+		#else:
+   		#print("wait for falling edge timed out")	
+		#while pi.read(SIG)==1:
+		#	print("fuck2")
+			#stop = time.time()
+		# Calculate pulse length
+		#elapsed = stop-start
+		#Distance pulse travelled in that time is time
+		# multiplied by the speed of sound (cm/s)
+		#distance = elapsed * 34000
+
+		# That was the distance there and back so halve the value
+		#distance = distance / 2
+		#print "Distance : %.1f" % distance
+		time.sleep(0.2)
+
+except KeyboardInterrupt:
+	sys.exit()		
+
